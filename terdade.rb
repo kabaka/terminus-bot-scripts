@@ -17,7 +17,7 @@ end
 helpers do
   def apply_substitutions text
     text.gsub! /(g+)(r+)(e+)(a+)(t+)/i,             '\1\2\4\5\3'
-    text.gsub! /(r+)(e+)(t+)(a+)(r+)(d+)(e+)(d+)/i, '\3\2\1\6\4\8\7'
+    text.gsub  /(r+)(e+)(t+)(a+)(r+)(d+)(e+)(d+)/i, '\3\2\1\6\4\8\7'
   end
 end
 
