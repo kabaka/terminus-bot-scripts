@@ -3,7 +3,7 @@ need_module! 'http'
 require 'rexml/document'
 
 command 'af' do
-  uri = URI('http://zebra.vacantminded.com:8000/af.ogg.xspf')
+  uri = URI('http://radio.autistic-faggots.net/radio.ogg.xspf')
 
   http_get(uri) do |http|
     root = REXML::Document.new http.response
