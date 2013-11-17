@@ -49,9 +49,9 @@ end
 command 'cassy', 'Look up Cassy\'s definitions of terms. Syntax: word|RANDOM|ADD word definition|DELETE word|STATS|LIST' do
   argc! 1
 
-  p = @params.first
+  params = @params.first
 
-  first_word, second_word, remainder = p.split(/\s/, 3)
+  first_word, second_word, remainder = params.split(/\s/, 3)
 
   case first_word.downcase
   when 'random'
@@ -74,6 +74,6 @@ command 'cassy', 'Look up Cassy\'s definitions of terms. Syntax: word|RANDOM|ADD
 
     reply "Definition for #{second_word} has been stored."
   else
-    display_cassyism p
+    display_cassyism params
   end
 end
