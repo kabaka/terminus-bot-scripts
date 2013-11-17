@@ -1,6 +1,6 @@
 register 'Store and output Cassyisms.'
 
-command 'cassy', 'Look up Cassy\'s definitions of terms. Syntax: RANDOM|ADD word definition|DELETE word' do
+command 'cassy', 'Look up Cassy\'s definitions of terms. Syntax: word|RANDOM|ADD word definition|DELETE word|STATS|LIST' do
   argc! 1
 
   p = @params.first
@@ -18,10 +18,20 @@ command 'cassy', 'Look up Cassy\'s definitions of terms. Syntax: RANDOM|ADD word
       reply "\02#{word}\02 is: #{fact}"
 
       next
+    elsif first_word == 'STATS'
+
+      reply "There are \002#{get_all_data.length}\002 definitions in the databsae."
+      next
+
+    elsif first_word == 'LIST'
+
+      reply get_all_data.keys.join ', '
+      next
+      
     end
 
     unless second_word.nil?
-      second_word.upcase!
+      second_word.downcase!
 
       if first_word == 'DELETE'
         unless get_data second_word
@@ -38,7 +48,7 @@ command 'cassy', 'Look up Cassy\'s definitions of terms. Syntax: RANDOM|ADD word
 
   else
     first_word.upcase!
-    second_word.upcase!
+    second_word.downcase!
 
     if first_word == 'ADD'
 
@@ -54,7 +64,7 @@ command 'cassy', 'Look up Cassy\'s definitions of terms. Syntax: RANDOM|ADD word
     end
   end
 
-  fact = get_data p.upcase
+  fact = get_data p.downcase
 
   if fact.nil?
     reply 'No such Cassy fact.'
