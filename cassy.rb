@@ -1,5 +1,37 @@
 register 'Store and output Cassyisms.'
 
+command 'cassy', 'Look up Cassy\'s definitions of terms. Syntax: word|RANDOM|ADD word definition|DELETE word|STATS|LIST' do
+  argc! 1
+
+  params = @params.first
+
+  first_word, second_word, remainder = params.split(/\s/, 3)
+
+  case first_word.downcase
+  when 'random'
+    display_cassyism
+  when 'stats'
+    reply "There are \002#{get_all_data.length}\002 definitions in the databsae."
+  when 'list'
+    reply get_all_data.keys.join ', '
+  when 'delete'
+    argc! 2, 'DELETE word'
+
+    delete_cassyism second_word
+
+    reply "Definition for #{second_word} has been deleted."
+
+  when 'add'
+    argc! 3, 'ADD word definition'
+
+    add_cassyism second_word, remainder
+
+    reply "Definition for #{second_word} has been stored."
+  else
+    display_cassyism params
+  end
+end
+
 helpers do
   def display_cassyism word = nil
     if word.nil?
@@ -46,34 +78,3 @@ helpers do
   end
 end
 
-command 'cassy', 'Look up Cassy\'s definitions of terms. Syntax: word|RANDOM|ADD word definition|DELETE word|STATS|LIST' do
-  argc! 1
-
-  params = @params.first
-
-  first_word, second_word, remainder = params.split(/\s/, 3)
-
-  case first_word.downcase
-  when 'random'
-    display_cassyism
-  when 'stats'
-    reply "There are \002#{get_all_data.length}\002 definitions in the databsae."
-  when 'list'
-    reply get_all_data.keys.join ', '
-  when 'delete'
-    argc! 2, 'DELETE word'
-
-    delete_cassyism second_word
-
-    reply "Definition for #{second_word} has been deleted."
-
-  when 'add'
-    argc! 3, 'ADD word definition'
-
-    add_cassyism second_word, remainder
-
-    reply "Definition for #{second_word} has been stored."
-  else
-    display_cassyism params
-  end
-end
