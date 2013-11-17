@@ -1,5 +1,51 @@
 register 'Store and output Cassyisms.'
 
+helpers do
+  def display_cassyism word = nil
+    if word.nil?
+      word = get_all_data.keys.sample
+
+      if word.nil?
+        raise 'No Cassyisms available.'
+      end
+
+      definition = get_data word
+    else
+      definition = get_cassyism word
+    end
+
+    actually_display_cassyism word, definition
+  end
+
+  def get_cassyism word
+    definition = get_data word.downcase
+
+    raise 'No such Cassyism.' if definition.nil?
+  end
+
+  def actually_display_cassyism word, definition
+    reply "\002#{word}\002 is #{definition}"
+  end
+
+  def delete_cassyism word
+    word.downcase!
+
+    unless get_data word
+      raise 'No such Cassyism.'
+    end
+
+    delete_data word
+  end
+
+  def add_cassyism word, definition
+    if get_data word.downcase
+      raise "Definition for #{word} already exists."
+    end
+
+    store_data word.downcase, remainder
+  end
+end
+
 command 'cassy', 'Look up Cassy\'s definitions of terms. Syntax: word|RANDOM|ADD word definition|DELETE word|STATS|LIST' do
   argc! 1
 
@@ -7,69 +53,27 @@ command 'cassy', 'Look up Cassy\'s definitions of terms. Syntax: word|RANDOM|ADD
 
   first_word, second_word, remainder = p.split(/\s/, 3)
 
-  if remainder.nil?
-    first_word.upcase!
+  case first_word.downcase
+  when 'random'
+    display_cassyism
+  when 'stats'
+    reply "There are \002#{get_all_data.length}\002 definitions in the databsae."
+  when 'list'
+    reply get_all_data.keys.join ', '
+  when 'delete'
+    argc! 2, 'DELETE word'
 
-    if first_word == 'RANDOM'
+    delete_cassyism second_word
 
-      word = get_all_data.keys.sample
-      fact = get_data word
+    reply "Definition for #{second_word} has been deleted."
 
-      reply "\02#{word}\02 is: #{fact}"
+  when 'add'
+    argc! 3, 'ADD word definition'
 
-      next
-    elsif first_word == 'STATS'
+    add_cassyism second_word, remainder
 
-      reply "There are \002#{get_all_data.length}\002 definitions in the databsae."
-      next
-
-    elsif first_word == 'LIST'
-
-      reply get_all_data.keys.join ', '
-      next
-      
-    end
-
-    unless second_word.nil?
-      second_word.downcase!
-
-      if first_word == 'DELETE'
-        unless get_data second_word
-          raise 'No such Cassy fact.'
-        end
-
-        delete_data second_word
-
-        reply "Definition for #{second_word} has been deleted."
-
-        next
-      end
-    end
-
+    reply "Definition for #{second_word} has been stored."
   else
-    first_word.upcase!
-    second_word.downcase!
-
-    if first_word == 'ADD'
-
-      if get_data second_word
-        raise "Definition for #{second_word} already exists."
-      end
-
-      store_data second_word, remainder
-
-      reply "Definition for #{second_word} has been stored."
-
-      next
-    end
+    display_cassyism p
   end
-
-  fact = get_data p.downcase
-
-  if fact.nil?
-    reply 'No such Cassy fact.'
-    next
-  end
-
-  reply fact
 end
