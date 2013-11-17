@@ -1,7 +1,5 @@
 register 'Store and output Cassyisms.'
 
-@@facts ||= {}
-
 command 'cassy', 'Look up Cassy\'s definitions of terms. Syntax: RANDOM|ADD word definition|DELETE word' do
   argc! 1
 
