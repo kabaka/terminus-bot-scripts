@@ -74,7 +74,7 @@ helpers do
       raise "Definition for #{word} already exists."
     end
 
-    store_data word.downcase, remainder
+    store_data word.downcase, definition
   end
 end
 
